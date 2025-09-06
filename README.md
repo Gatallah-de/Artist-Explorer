@@ -9,7 +9,7 @@ This project demonstrates my ability to build **production-grade React/Next.js a
 
 ## 🌐 Live Demo
 
-👉 [Artist Explorer on Vercel](https://artist-explorer.vercel.app)
+👉 [Artist Explorer on Vercel]([https://artist-explorer.vercel.app])
 
 ---
 
