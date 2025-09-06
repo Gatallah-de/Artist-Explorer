@@ -1,0 +1,89 @@
+/* src/styles/layout.css — plain CSS (no @layer) */
+
+.container-x {
+  max-width: var(--container-max);
+  @apply w-full mx-auto px-4;
+}
+
+/* Hero helpers */
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  z-index: 2000;
+}
+
+@media (max-width:1024px) {
+  .hero-art--br {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-art {
+    animation: none;
+  }
+}
+
+@media (max-width:900px) {
+  .hero-art {
+    display: none;
+  }
+}
+
+/* Examples/tiles cleanup (no weird shadows/borders) */
+.tiles-clean {
+  position: relative;
+  isolation: isolate;
+}
+
+.tiles-clean > * {
+  border: 0 !important;
+}
+
+.tiles-clean::before,
+.tiles-clean::after,
+.tiles-clean > *::before,
+.tiles-clean > *::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+}
+
+.examples-no-rails,
+.examples-no-rails * {
+  background-image: none !important;
+}
+
+.examples-no-rails::before,
+.examples-no-rails::after,
+.examples-no-rails *::before,
+.examples-no-rails *::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+}
+
+.examples-no-rails {
+  position: relative;
+  z-index: 0;
+}
+
+.examples-no-rails li {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.tiles-clean li {
+  transform: none !important;
+  transition: none !important;
+}
+
+.examples-stable {
+  min-height: 220px;
+}

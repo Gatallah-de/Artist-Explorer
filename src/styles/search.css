@@ -1,0 +1,122 @@
+/* src/styles/search.css */
+
+/* Shell (if you previously used a halo/pill around input) */
+.search-shell { border-radius: 12px !important; }
+.search-shell::before,
+.search-shell::after { content: none !important; display: none !important; }
+
+/* Dropdown panel (overlays content) */
+.search-panel{
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  margin-top: 8px;
+
+  display: block;
+  max-height: 60vh;
+  overflow: hidden;
+
+  /* Make the panel self-contained (prevents weird scroll “tugging”) */
+  overscroll-behavior: contain;
+  isolation: isolate;
+  z-index: 2100;
+
+  /* Create its own stacking context to sit above siblings reliably */
+  transform: translateZ(0);
+
+  background: #0e1120;
+  background-image:
+    radial-gradient(60% 120% at 50% 0%, rgba(124,58,237,.08), transparent 60%),
+    radial-gradient(60% 120% at 50% 0%, rgba(34,211,238,.06), transparent 60%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+
+/* Optional columns (when split mode is used) */
+.artists-rail,
+.albums-col { min-height: 0; }
+
+/* Sticky headers inside the panel */
+#artists-h,
+#albums-h{
+  position: sticky; top: 0; z-index: 1;
+  padding: 6px 8px;
+  background: linear-gradient(180deg, rgba(14,17,32,.95) 70%, rgba(14,17,32,.8));
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  backdrop-filter: saturate(110%);
+}
+
+/* Scroll container with soft edge mask */
+.search-panel .overflow-auto{
+  scrollbar-gutter: stable both-edges;
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
+}
+
+/* Result row */
+.result-row{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 56px;
+  border-radius: 10px;
+  padding-block: 6px;
+  transition: background-color .18s ease, box-shadow .18s ease;
+}
+.result-row:hover { background: rgba(124,58,237,.10); }
+.result-row[aria-selected="true"]{
+  background: rgba(124,58,237,.14);
+  box-shadow: inset 0 0 0 1px rgba(124,58,237,.25);
+}
+
+/* Thumbnail */
+.row-thumb{
+  width: 40px; height: 40px;
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+}
+.row-thumb img{
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+
+/* Text column: title + credits in a fixed 2-row grid */
+.row-main{
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto; /* title, credits */
+  align-content: start;
+  padding-block: .25rem;
+}
+
+/* Title locked to exactly 2 lines so credits line up */
+.row-title{
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  min-height: calc(1.25em * 2); /* reserve space for 2 lines */
+}
+
+/* Credits / subtitle */
+.row-sub{
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.1;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

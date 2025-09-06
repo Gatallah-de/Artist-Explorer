@@ -1,0 +1,36 @@
+/* src/styles/tokens.css */
+
+/* ================================
+   Design Tokens
+   ================================ */
+:root {
+  --header-h: 64px;
+  --container-max: 1200px;
+
+  --bg: #0a0b10;
+  --fg: #eef2ff;
+
+  /* Slightly brighter for AA contrast */
+  --muted: #aab3c4;
+
+  --accent: #7c3aed;    /* purple */
+  --accent-2: #22d3ee;  /* cyan   */
+  --accent-3: #14f195;  /* mint   */
+
+  --card: #111321;
+  --card-border: rgba(255, 255, 255, .06);
+
+  --ring: 124, 58, 237; /* rgb triplet for focus ring */
+
+  /* Neon background palette */
+  --bg-top:  #0b1020;
+  --bg-mid:  #0c0f1c;
+  --bg-bot:  #0b0b18;
+
+  --cyan:   rgba(56, 216, 234, .35);
+  --violet: rgba(139, 92, 246, .35);
+  --pink:   rgba(236, 72, 153, .28);
+  --mint:   rgba(20, 241, 149, .22);
+
+  --glow-sat: 115%;
+}

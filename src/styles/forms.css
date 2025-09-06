@@ -1,0 +1,38 @@
+/* Inputs */
+.input {
+  @apply w-full rounded-lg px-4 py-2.5 text-sm border outline-none;
+  background: #0e1120;
+  border-color: var(--card-border);
+  color: var(--fg);
+}
+.input::placeholder { opacity: .7; }
+.input:focus {
+  box-shadow: 0 0 0 2px rgba(var(--ring), .35);
+  border-color: rgba(124, 58, 237, .35);
+}
+.input::-webkit-search-cancel-button {
+  filter: invert(1) opacity(.7);
+}
+.glass > .input {
+  background: transparent !important;
+  border-color: transparent !important;
+  padding-block: .625rem;
+  caret-color: var(--fg);
+}
+
+/* Chips */
+.chip {
+  @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs;
+  background: rgba(124, 58, 237, .08);
+  border: 1px solid var(--card-border);
+}
+
+/* Links */
+.link-glow {
+  text-decoration: underline;
+  text-decoration-color: rgba(124, 58, 237, .6);
+  text-underline-offset: 3px;
+}
+.link-glow:hover {
+  text-decoration-color: rgba(34, 211, 238, .7);
+}

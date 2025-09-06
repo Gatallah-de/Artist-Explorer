@@ -1,0 +1,28 @@
+/* src/styles/base.css */
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul, ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Focus ring helper */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--ring), .35);
+}

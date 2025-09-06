@@ -1,0 +1,87 @@
+/* animations can live anywhere */
+@keyframes neon-shimmer {
+  0%   { background-position: 0 0, 0 0 }
+  100% { background-position: 0 -300px, 300px 0 }
+}
+
+/* base positioning */
+.site-bg,
+.site-bg > div {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.site-bg { z-index: -1; }
+
+.site-bg > div {
+  contain: paint;
+  will-change: transform, filter, opacity;
+}
+
+/* 1) dark wash */
+.site-bg__wash {
+  background:
+    radial-gradient(120% 75% at 50% 0%, rgba(20,30,60,.45), transparent 60%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-mid) 45%, var(--bg-bot));
+  filter: saturate(var(--glow-sat)) contrast(105%);
+}
+
+/* 2) corner rims */
+.site-bg__rims {
+  background:
+    radial-gradient(55% 40% at 10% 8%,  var(--violet), transparent 60%),
+    radial-gradient(50% 38% at 90% 10%, var(--cyan),   transparent 60%),
+    radial-gradient(60% 45% at 12% 88%, var(--pink),   transparent 62%),
+    radial-gradient(55% 42% at 88% 92%, var(--mint),   transparent 62%);
+  filter: blur(14px) saturate(var(--glow-sat));
+  opacity:.55;
+  mix-blend-mode: screen;
+}
+
+/* 3) center band */
+.site-bg__band {
+  background:
+    radial-gradient(90% 22% at 50% 40%, rgba(56,216,234,.18), transparent 70%),
+    radial-gradient(90% 20% at 50% 52%, rgba(139,92,246,.14), transparent 72%);
+  filter: blur(10px);
+  opacity:.6;
+  mix-blend-mode: screen;
+}
+
+/* 4) fine lines (animation optional) */
+.site-bg__lines {
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,.05) 0 1px,
+      transparent 1px 10px),
+    repeating-linear-gradient(45deg,
+      rgba(56,216,234,.06) 0 2px,
+      transparent 2px 26px);
+  opacity:.06;
+  mix-blend-mode: screen;
+  /* animation: neon-shimmer 40s linear infinite; */
+}
+
+/* 5) top/bottom bars */
+.site-bg__bars {
+  background:
+    linear-gradient(180deg,
+      rgba(139,92,246,.18), transparent 35%) top/100% 14% no-repeat,
+    linear-gradient(0deg,
+      rgba(56,216,234,.14), transparent 35%) bottom/100% 16% no-repeat;
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  opacity:.5;
+}
+
+/* 6) vignette */
+.site-bg__vignette {
+  background:
+    radial-gradient(120% 85% at 50% 0%, rgba(0,0,0,.16), transparent 55%),
+    radial-gradient(80% 70% at 50% 100%, rgba(0,0,0,.30), transparent 60%);
+}
+
+/* a11y if shimmer is enabled later */
+@media (prefers-reduced-motion: reduce){
+  .site-bg__lines { animation: none !important; }
+}

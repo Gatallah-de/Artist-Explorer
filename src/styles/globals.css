@@ -1,0 +1,37 @@
+/* src/styles/globals.css */
+
+/* ================================
+   Tailwind base
+   ================================ */
+@tailwind base;
+
+/* Base-level imports (must follow @tailwind base) */
+@import "./base.css";       /* resets */
+@import "./tokens.css";     /* variables */
+
+/* ================================
+   Tailwind components
+   ================================ */
+@tailwind components;
+
+/* Component-level imports */
+@import "./header.css";
+@import "./nav.css";
+@import "./cards.css";
+@import "./forms.css";
+@import "./search.css";
+@import "./layout.css";
+
+/* ================================
+   Tailwind utilities
+   ================================ */
+@tailwind utilities;
+
+/* Utility-level imports */
+@import "./utilities.css";
+
+/* ================================
+   Global extras (not layered)
+   ================================ */
+@import "./scrollbars.css"; /* scrollbar */
+@import "./background.css"; /* neon background */
