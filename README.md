@@ -7,6 +7,12 @@ This project demonstrates my ability to build **production-grade React/Next.js a
 
 ---
 
+## 🌐 Live Demo
+
+👉 [Artist Explorer on Vercel](https://artist-explorer.vercel.app)
+
+---
+
 ## 🌟 Why This Project?
 
 I created Artist Explorer as a way to practice **modern web app architecture** with Next.js 13’s App Router, TypeScript strict mode, and a custom API layer.
