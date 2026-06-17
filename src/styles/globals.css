@@ -1,20 +1,12 @@
 /* src/styles/globals.css */
 
 /* ================================
-   Tailwind base
+   Imports (must come first)
    ================================ */
-@tailwind base;
 
-/* Base-level imports (must follow @tailwind base) */
-@import "./base.css";       /* resets */
-@import "./tokens.css";     /* variables */
+@import "./base.css";
+@import "./tokens.css";
 
-/* ================================
-   Tailwind components
-   ================================ */
-@tailwind components;
-
-/* Component-level imports */
 @import "./header.css";
 @import "./nav.css";
 @import "./cards.css";
@@ -22,20 +14,22 @@
 @import "./search.css";
 @import "./layout.css";
 
-/* ================================
-   Tailwind utilities
-   ================================ */
-@tailwind utilities;
-
-/* Utility-level imports */
 @import "./utilities.css";
 
-/* ================================
-   Global extras (not layered)
-   ================================ */
-@import "./scrollbars.css"; /* scrollbar */
-@import "./background.css"; /* neon background */
+@import "./scrollbars.css";
+@import "./background.css";
 
+/* ================================
+   Tailwind
+   ================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   Global overrides
+   ================================ */
 
 .examples-no-scrollbar {
   scrollbar-width: none;
@@ -51,4 +45,3 @@
     padding-top: 0;
   }
 }
-
