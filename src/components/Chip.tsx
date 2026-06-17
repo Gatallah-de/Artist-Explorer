@@ -15,21 +15,27 @@ type ChipPropsFor<T extends AsTag> =
     (T extends "a"
       ? React.AnchorHTMLAttributes<HTMLAnchorElement>
       : T extends "button"
-      ? React.ButtonHTMLAttributes<HTMLButtonElement>
-      : React.HTMLAttributes<HTMLElement>) & {
+        ? React.ButtonHTMLAttributes<HTMLButtonElement>
+        : React.HTMLAttributes<HTMLElement>) & {
       as?: T;
     };
 
-// Default: span
 export default function Chip<T extends AsTag = "span">(
   props: ChipPropsFor<T>
 ) {
-  const { as, className, children, ...rest } = props as ChipPropsFor<AsTag>;
-  const As = (as ?? "span") as keyof JSX.IntrinsicElements;
+  const { as, className, children, ...rest } =
+    props as ChipPropsFor<AsTag>;
+
+  const Component = (as ?? "span") as React.ElementType;
 
   return (
-    <As className={["chip", className ?? ""].filter(Boolean).join(" ")} {...(rest as any)}>
+    <Component
+      className={["chip", className ?? ""]
+        .filter(Boolean)
+        .join(" ")}
+      {...rest}
+    >
       {children}
-    </As>
+    </Component>
   );
 }
