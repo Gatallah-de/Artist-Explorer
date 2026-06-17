@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -13,7 +14,22 @@ import { useFavorites } from "@/components/useFavorites";
 import UnfavButton from "@/components/UnfavButton";
 
 const ORDER = ["artists", "albums"] as const;
+
 type TabKey = (typeof ORDER)[number];
+
+type CardFrameProps = {
+  children: React.ReactNode;
+};
+
+type MediaProps = {
+  src?: string;
+  alt: string;
+};
+
+type MetaProps = {
+  title: string;
+  secondary?: string | number;
+};
 
 export default function FavoritesPage() {
   const { favs } = useFavorites();
@@ -36,13 +52,11 @@ export default function FavoritesPage() {
 
   const emptyAll = artists.length === 0 && albums.length === 0;
 
-  const initialTab = useMemo<TabKey>(() => {
+  const [tab, setTab] = useState<TabKey>(() => {
     if (artists.length > 0) return "artists";
     if (albums.length > 0) return "albums";
     return "artists";
-  }, [artists.length, albums.length]);
-
-  const [tab, setTab] = useState<TabKey>(initialTab);
+  });
 
   const uid = useId();
 
@@ -80,37 +94,33 @@ export default function FavoritesPage() {
     const len = ORDER.length;
     const idx = ORDER.indexOf(tab);
 
-    if (idx < 0) return;
+    if (idx === -1) return;
 
-    const focusTab = (k: TabKey) => {
-      setTab(k);
-      tabRefs.current[k]?.focus();
+    const focusTab = (next: TabKey) => {
+      setTab(next);
+      tabRefs.current[next]?.focus();
     };
 
     switch (e.key) {
-      case "ArrowRight": {
+      case "ArrowRight":
         e.preventDefault();
-        focusTab(ORDER[(idx + 1) % len]);
+        focusTab(ORDER[(idx + 1) % len]!);
         break;
-      }
 
-      case "ArrowLeft": {
+      case "ArrowLeft":
         e.preventDefault();
-        focusTab(ORDER[(idx - 1 + len) % len]);
+        focusTab(ORDER[(idx - 1 + len) % len]!);
         break;
-      }
 
-      case "Home": {
+      case "Home":
         e.preventDefault();
-        focusTab(ORDER[0]);
+        focusTab(ORDER[0]!);
         break;
-      }
 
-      case "End": {
+      case "End":
         e.preventDefault();
-        focusTab(ORDER[len - 1]);
+        focusTab(ORDER[len - 1]!);
         break;
-      }
     }
   };
 
@@ -122,8 +132,8 @@ export default function FavoritesPage() {
         </h1>
 
         <p className="text-muted">
-          No favorites yet. Save an artist or an album to see
-          it here.
+          No favorites yet. Save an artist or an album to
+          see it here.
         </p>
 
         <p className="text-sm">
@@ -137,85 +147,76 @@ export default function FavoritesPage() {
     );
   }
 
-  const CardFrame = ({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) => (
-    <div
-      className={[
-        "group relative overflow-hidden rounded-2xl",
-        "border border-token bg-[#111321]/80 backdrop-blur-sm",
-        "transition will-change-transform",
-        "hover:-translate-y-1 focus-within:-translate-y-1",
-        "focus-within:ring-2 focus-within:ring-[rgba(var(--ring),.45)]",
-        "shadow-[0_6px_18px_rgba(0,0,0,.18)]",
-      ].join(" ")}
-    >
+  function CardFrame({ children }: CardFrameProps) {
+    return (
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition group-hover:opacity-100"
-        style={{
-          boxShadow:
-            "0 0 16px rgba(124,58,237,.55), 0 0 28px rgba(34,211,238,.40)",
-        }}
-      />
-
-      {children}
-    </div>
-  );
-
-  const Media = ({
-    src,
-    alt,
-  }: {
-    src?: string;
-    alt: string;
-  }) => (
-    <div className="relative aspect-square w-full overflow-hidden">
-      {src ? (
-        <img
-          src={src}
-          alt={alt}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
-          loading="lazy"
-          decoding="async"
-        />
-      ) : (
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "rgba(255,255,255,.04)",
-            border: "1px solid var(--card-border)",
-          }}
-          aria-hidden
-        />
-      )}
-    </div>
-  );
-
-  const Meta = ({
-    title,
-    secondary,
-  }: {
-    title: string;
-    secondary?: string | number;
-  }) => (
-    <div className="flex min-h-[88px] flex-col gap-1 p-3">
-      <div
-        className="line-clamp-2 text-[0.95rem] font-medium leading-tight"
-        title={title}
+        className={[
+          "group relative overflow-hidden rounded-2xl",
+          "border border-token bg-[#111321]/80 backdrop-blur-sm",
+          "transition will-change-transform",
+          "hover:-translate-y-1 focus-within:-translate-y-1",
+          "focus-within:ring-2 focus-within:ring-[rgba(var(--ring),.45)]",
+          "shadow-[0_6px_18px_rgba(0,0,0,.18)]",
+        ].join(" ")}
       >
-        {title}
-      </div>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition group-hover:opacity-100"
+          style={{
+            boxShadow:
+              "0 0 16px rgba(124,58,237,.55), 0 0 28px rgba(34,211,238,.40)",
+          }}
+        />
 
-      {secondary ? (
-        <div className="text-xs text-muted">
-          {secondary}
+        {children}
+      </div>
+    );
+  }
+
+  function Media({ src, alt }: MediaProps) {
+    return (
+      <div className="relative aspect-square w-full overflow-hidden">
+        {src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={src}
+            alt={alt}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "rgba(255,255,255,.04)",
+              border: "1px solid var(--card-border)",
+            }}
+            aria-hidden
+          />
+        )}
+      </div>
+    );
+  }
+
+  function Meta({ title, secondary }: MetaProps) {
+    return (
+      <div className="flex min-h-[88px] flex-col gap-1 p-3">
+        <div
+          className="line-clamp-2 text-[0.95rem] font-medium leading-tight"
+          title={title}
+        >
+          {title}
         </div>
-      ) : null}
-    </div>
-  );
+
+        {secondary ? (
+          <div className="text-xs text-muted">
+            {secondary}
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   const GRID =
     "grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 md:gap-6";
@@ -300,7 +301,7 @@ export default function FavoritesPage() {
                 ? `/artist/${encodeURIComponent(f.id)}`
                 : undefined;
 
-              const inner = (
+              const content = (
                 <>
                   {f.id && (
                     <div className="absolute right-2 top-2 z-10">
@@ -327,7 +328,7 @@ export default function FavoritesPage() {
                   aria-label={`Open artist ${f.title}`}
                   className="block outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--ring),.45)]"
                 >
-                  <CardFrame>{inner}</CardFrame>
+                  <CardFrame>{content}</CardFrame>
                 </Link>
               ) : (
                 <article
@@ -336,7 +337,7 @@ export default function FavoritesPage() {
                   tabIndex={-1}
                   className="opacity-75"
                 >
-                  <CardFrame>{inner}</CardFrame>
+                  <CardFrame>{content}</CardFrame>
                 </article>
               );
             })}
@@ -371,7 +372,7 @@ export default function FavoritesPage() {
                 ? `/album/${encodeURIComponent(f.id)}`
                 : undefined;
 
-              const inner = (
+              const content = (
                 <>
                   {f.id && (
                     <div className="absolute right-2 top-2 z-10">
@@ -398,7 +399,7 @@ export default function FavoritesPage() {
                   aria-label={`Open album ${f.title}`}
                   className="block outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--ring),.45)]"
                 >
-                  <CardFrame>{inner}</CardFrame>
+                  <CardFrame>{content}</CardFrame>
                 </Link>
               ) : (
                 <article
@@ -407,7 +408,7 @@ export default function FavoritesPage() {
                   tabIndex={-1}
                   className="opacity-75"
                 >
-                  <CardFrame>{inner}</CardFrame>
+                  <CardFrame>{content}</CardFrame>
                 </article>
               );
             })}
