@@ -22,7 +22,7 @@ type CardFrameProps = {
 };
 
 type MediaProps = {
-  src?: string;
+  src: string | undefined
   alt: string;
 };
 
