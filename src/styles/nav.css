@@ -1,0 +1,84 @@
+/* src/styles/nav.css — plain CSS (no @layer) */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.nav-pill {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem .75rem;
+  border-radius: 10px;
+  font-size: .925rem;
+  line-height: 1;
+  color: var(--fg);
+  outline: none;
+  transition: box-shadow .18s ease, color .18s ease;
+}
+
+.nav-pill .nav-pill__txt {
+  opacity: .9;
+  transition: opacity .18s ease;
+}
+
+.nav-pill::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  z-index: -1;
+  background:
+    radial-gradient(160px 60px at 0% 100%, rgba(124,58,237,.55), transparent 55%),
+    radial-gradient(160px 60px at 100% 0%, rgba(34,211,238,.55), transparent 55%);
+  filter: blur(10px) saturate(120%);
+  opacity: 0;
+  transform: scale(.96);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.nav-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+
+.nav-pill:hover::before,
+.nav-pill:focus-visible::before {
+  opacity: .85;
+  transform: scale(1);
+}
+
+.nav-pill:hover::after,
+.nav-pill:focus-visible::after {
+  opacity: 1;
+}
+
+.nav-pill:hover .nav-pill__txt,
+.nav-pill:focus-visible .nav-pill__txt {
+  opacity: 1;
+}
+
+.nav-pill.is-active {
+  font-weight: 600;
+}
+
+.nav-pill.is-active::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-pill.is-active::after {
+  opacity: 1;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08) inset,
+    0 0 0 2px rgba(124,58,237,.25) inset;
+}

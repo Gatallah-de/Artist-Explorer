@@ -1,0 +1,135 @@
+/* src/styles/layout.css */
+
+:root {
+  --mobile-nav-h: 72px;
+}
+
+/* ===== Layout ===== */
+
+.container-x {
+  width: 100%;
+  max-width: var(--container-max);
+
+  margin-inline: auto;
+
+  padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-x {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* ===== Hero ===== */
+
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  z-index: 10;
+}
+
+.hero-art {
+  will-change: transform;
+}
+
+@media (max-width: 1024px) {
+  .hero-art--br {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-art {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-stage {
+    padding-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-art {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ===== Example section ===== */
+
+.examples-stable {
+  min-height: 220px;
+}
+
+@media (max-width: 768px) {
+  .examples-stable {
+    min-height: auto;
+  }
+}
+
+/* ===== Example cards carousel ===== */
+
+.examples-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.examples-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== Legacy visual cleanup ===== */
+
+.tiles-clean,
+.examples-no-rails {
+  position: relative;
+  isolation: isolate;
+}
+
+.tiles-clean::before,
+.tiles-clean::after,
+.examples-no-rails::before,
+.examples-no-rails::after {
+  content: none !important;
+}
+
+.examples-no-rails,
+.examples-no-rails * {
+  background-image: none !important;
+}
+
+.examples-no-rails li {
+  box-shadow: none !important;
+}
+
+/* Remove decorative rails from older components */
+
+.tiles-clean > *::before,
+.tiles-clean > *::after,
+.examples-no-rails *::before,
+.examples-no-rails *::after {
+  content: none !important;
+
+  display: none !important;
+
+  background: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ===== Mobile safe area ===== */
+
+.page-safe-bottom {
+  padding-bottom:
+    calc(var(--mobile-nav-h) + env(safe-area-inset-bottom) + 1rem);
+}
+
+@media (min-width: 768px) {
+  .page-safe-bottom {
+    padding-bottom: 0;
+  }
+}
