@@ -12,10 +12,12 @@ export type HeroProps = {
 
   /** Background image (under a dark gradient). */
   bg?: string;
+
   /** Optional left thumbnail. */
   thumb?: string;
 
   chips?: string[];
+
   /** Content rendered as the fav button. */
   rightSlot?: React.ReactNode;
 
@@ -26,10 +28,10 @@ export type HeroProps = {
   style?: React.CSSProperties;
 
   /** Wrapper element (defaults to section). */
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 
   /** Heading element (defaults to h1). */
-  headingAs?: keyof JSX.IntrinsicElements;
+  headingAs?: React.ElementType;
 
   /** If true, apply card chrome (rounded/border). */
   card?: boolean;
@@ -52,14 +54,18 @@ export default function Hero({
   card = true,
 }: HeroProps) {
   const titleSize =
-    size === "lg" ? "text-3xl md:text-4xl" : size === "sm" ? "text-xl" : "text-2xl";
+    size === "lg"
+      ? "text-3xl md:text-4xl"
+      : size === "sm"
+        ? "text-xl"
+        : "text-2xl";
 
   return (
     <As
       className={[
         "relative overflow-hidden",
         card ? "rounded-2xl border border-token" : "",
-        "bg-[rgba(17,19,33,.75)]", // soft glass
+        "bg-[rgba(17,19,33,.75)]",
         "backdrop-blur-sm",
         className,
       ]
@@ -68,7 +74,6 @@ export default function Hero({
       style={style}
       aria-labelledby="hero-title"
     >
-      {/* BG + veil */}
       {bg && (
         <div
           aria-hidden
@@ -82,68 +87,65 @@ export default function Hero({
         />
       )}
 
-      {/* CONTENT (adds inset padding so edges never hug) */}
-      <div
-        className={[
-          "relative",
-          "px-4 sm:px-6 md:px-8", // ← horizontal inset
-          "py-4 sm:py-5 md:py-6", // ← vertical inset
-        ].join(" ")}
-      >
-        {/* Floating right action (fav) with safe margins */}
-        {rightSlot ? (
+      <div className="relative px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6">
+        {rightSlot && (
           <div
             className="
               absolute top-3 right-3 md:top-4 md:right-4
-              rounded-full border border-token/80 bg-black/25 backdrop-blur
+              rounded-full border border-token/80
+              bg-black/25 backdrop-blur
               p-1.5 shadow-sm
             "
           >
             {rightSlot}
           </div>
-        ) : null}
+        )}
 
         <div
           className={[
-            "flex gap-5 md:gap-6",
-            "flex-col sm:flex-row",
+            "flex flex-col gap-5 sm:flex-row md:gap-6",
             align === "center" ? "items-center" : "items-start",
           ].join(" ")}
         >
-          {/* Left thumb with a little breathing room */}
           {thumb && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={thumb}
               alt=""
               className="
-                w-16 h-16 md:w-20 md:h-20
-                object-cover rounded-xl
-                ring-1 ring-white/5 border border-token
+                h-16 w-16 rounded-xl object-cover
+                border border-token ring-1 ring-white/5
                 shadow-inner
+                md:h-20 md:w-20
               "
             />
           )}
 
-          {/* Text block */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             {eyebrow && (
-              <div className="text-xs uppercase tracking-wide text-muted mb-1.5">
+              <div className="mb-1.5 text-xs uppercase tracking-wide text-muted">
                 {eyebrow}
               </div>
             )}
 
-            <HeadingAs id="hero-title" className={`font-semibold leading-tight ${titleSize}`}>
+            <HeadingAs
+              id="hero-title"
+              className={`font-semibold leading-tight ${titleSize}`}
+            >
               {title}
             </HeadingAs>
 
-            {subtitle && <p className="text-muted mt-2 max-w-3xl">{subtitle}</p>}
+            {subtitle && (
+              <p className="mt-2 max-w-3xl text-muted">
+                {subtitle}
+              </p>
+            )}
 
-            {!!chips.length && (
+            {chips.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
-                {chips.map((c) => (
-                  <span key={c} className="chip">
-                    {c}
+                {chips.map((chip) => (
+                  <span key={chip} className="chip">
+                    {chip}
                   </span>
                 ))}
               </div>
