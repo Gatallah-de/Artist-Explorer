@@ -1,15 +1,14 @@
-// src/app/favorites/page.tsx
 "use client";
 
 import Link from "next/link";
 import {
-  useEffect,
+  useCallback,
   useId,
   useMemo,
   useRef,
   useState,
-  useCallback,
 } from "react";
+
 import { useFavorites } from "@/components/useFavorites";
 import UnfavButton from "@/components/UnfavButton";
 
@@ -26,6 +25,7 @@ export default function FavoritesPage() {
         .sort((a, b) => a.title.localeCompare(b.title)),
     [favs]
   );
+
   const albums = useMemo(
     () =>
       [...favs]
@@ -36,13 +36,28 @@ export default function FavoritesPage() {
 
   const emptyAll = artists.length === 0 && albums.length === 0;
 
-  const [tab, setTab] = useState<TabKey>("artists");
+  const initialTab = useMemo<TabKey>(() => {
+    if (artists.length > 0) return "artists";
+    if (albums.length > 0) return "albums";
+    return "artists";
+  }, [artists.length, albums.length]);
+
+  const [tab, setTab] = useState<TabKey>(initialTab);
+
   const uid = useId();
 
   const tabs = useMemo(
     () => [
-      { key: "artists" as const, label: "Artists", count: artists.length },
-      { key: "albums" as const, label: "Albums", count: albums.length },
+      {
+        key: "artists" as const,
+        label: "Artists",
+        count: artists.length,
+      },
+      {
+        key: "albums" as const,
+        label: "Albums",
+        count: albums.length,
+      },
     ],
     [artists.length, albums.length]
   );
@@ -51,6 +66,7 @@ export default function FavoritesPage() {
     artists: null,
     albums: null,
   });
+
   const setTabRef = useCallback(
     (key: TabKey) => (el: HTMLButtonElement | null) => {
       tabRefs.current[key] = el;
@@ -58,19 +74,12 @@ export default function FavoritesPage() {
     []
   );
 
-  useEffect(() => {
-    if (tab === "artists" && artists.length === 0 && albums.length > 0) {
-      setTab("albums");
-      tabRefs.current.albums?.focus();
-    } else if (tab === "albums" && albums.length === 0 && artists.length > 0) {
-      setTab("artists");
-      tabRefs.current.artists?.focus();
-    }
-  }, [tab, artists.length, albums.length]);
-
-  const onTabsKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const onTabsKeyDown = (
+    e: React.KeyboardEvent<HTMLDivElement>
+  ) => {
     const len = ORDER.length;
     const idx = ORDER.indexOf(tab);
+
     if (idx < 0) return;
 
     const focusTab = (k: TabKey) => {
@@ -81,25 +90,25 @@ export default function FavoritesPage() {
     switch (e.key) {
       case "ArrowRight": {
         e.preventDefault();
-        const next = ORDER[(idx + 1) % len] as TabKey;
-        focusTab(next);
+        focusTab(ORDER[(idx + 1) % len]);
         break;
       }
+
       case "ArrowLeft": {
         e.preventDefault();
-        const prev = ORDER[(idx - 1 + len) % len] as TabKey;
-        focusTab(prev);
+        focusTab(ORDER[(idx - 1 + len) % len]);
         break;
       }
+
       case "Home": {
         e.preventDefault();
-        focusTab(ORDER[0] as TabKey);
+        focusTab(ORDER[0]);
         break;
       }
+
       case "End": {
         e.preventDefault();
-        const last = ORDER[(len - 1) as 0 | 1] as TabKey;
-        focusTab(last);
+        focusTab(ORDER[len - 1]);
         break;
       }
     }
@@ -108,10 +117,15 @@ export default function FavoritesPage() {
   if (emptyAll) {
     return (
       <div className="space-y-3">
-        <h1 className="text-2xl font-semibold">Your Favorites</h1>
+        <h1 className="text-2xl font-semibold">
+          Your Favorites
+        </h1>
+
         <p className="text-muted">
-          No favorites yet. Save an artist or an album to see it here.
+          No favorites yet. Save an artist or an album to see
+          it here.
         </p>
+
         <p className="text-sm">
           Try searching above or visit the{" "}
           <Link href="/" className="underline">
@@ -123,9 +137,11 @@ export default function FavoritesPage() {
     );
   }
 
-  /* ---------- shared card pieces (match artist page "Top albums") ---------- */
-
-  const CardFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  const CardFrame = ({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) => (
     <div
       className={[
         "group relative overflow-hidden rounded-2xl",
@@ -144,18 +160,24 @@ export default function FavoritesPage() {
             "0 0 16px rgba(124,58,237,.55), 0 0 28px rgba(34,211,238,.40)",
         }}
       />
+
       {children}
     </div>
   );
 
-  const Media = ({ src, alt }: { src?: string; alt: string }) => (
-    <div className="relative w-full aspect-square overflow-hidden">
+  const Media = ({
+    src,
+    alt,
+  }: {
+    src?: string;
+    alt: string;
+  }) => (
+    <div className="relative aspect-square w-full overflow-hidden">
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
           loading="lazy"
           decoding="async"
         />
@@ -179,28 +201,33 @@ export default function FavoritesPage() {
     title: string;
     secondary?: string | number;
   }) => (
-    <div className="p-3 flex flex-col gap-1 min-h-[88px]">
+    <div className="flex min-h-[88px] flex-col gap-1 p-3">
       <div
-        className="font-medium leading-tight text-[0.95rem] line-clamp-2"
+        className="line-clamp-2 text-[0.95rem] font-medium leading-tight"
         title={title}
       >
         {title}
       </div>
-      {secondary ? <div className="text-xs text-muted">{secondary}</div> : null}
+
+      {secondary ? (
+        <div className="text-xs text-muted">
+          {secondary}
+        </div>
+      ) : null}
     </div>
   );
 
-  /* ---------- grids ---------- */
-
-  const GRID = "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-6";
+  const GRID =
+    "grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5 md:gap-6";
 
   return (
     <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between">
-        <h1 className="text-2xl font-semibold">Your Favorites</h1>
+        <h1 className="text-2xl font-semibold">
+          Your Favorites
+        </h1>
       </div>
 
-      {/* Tabs */}
       <div
         role="tablist"
         aria-label="Favorite types"
@@ -215,6 +242,7 @@ export default function FavoritesPage() {
       >
         {tabs.map(({ key, label, count }) => {
           const selected = tab === key;
+
           return (
             <button
               key={key}
@@ -227,8 +255,10 @@ export default function FavoritesPage() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setTab(key)}
               className={[
-                "px-3 py-1.5 text-sm transition outline-none relative",
-                selected ? "font-medium" : "hover:bg-[rgba(255,255,255,.04)]",
+                "relative px-3 py-1.5 text-sm outline-none transition",
+                selected
+                  ? "font-medium"
+                  : "hover:bg-[rgba(255,255,255,.04)]",
                 "focus-visible:ring-2",
               ].join(" ")}
               style={{
@@ -243,7 +273,6 @@ export default function FavoritesPage() {
         })}
       </div>
 
-      {/* Artists */}
       <section
         role="tabpanel"
         id={`panel-artists-${uid}`}
@@ -253,28 +282,40 @@ export default function FavoritesPage() {
       >
         <header className="flex items-end justify-between">
           <h2 className="text-lg font-semibold">
-            Artists <span className="text-muted font-normal">({artists.length})</span>
+            Artists{" "}
+            <span className="font-normal text-muted">
+              ({artists.length})
+            </span>
           </h2>
         </header>
 
         {artists.length === 0 ? (
-          <p className="text-sm text-muted">No favorite artists yet.</p>
+          <p className="text-sm text-muted">
+            No favorite artists yet.
+          </p>
         ) : (
           <div className={GRID}>
             {artists.map((f) => {
-              const href = f?.id ? `/artist/${encodeURIComponent(f.id)}` : undefined;
+              const href = f.id
+                ? `/artist/${encodeURIComponent(f.id)}`
+                : undefined;
+
               const inner = (
                 <>
-                  {f.id ? (
-                    <div className="absolute top-2 right-2 z-10">
-                      <UnfavButton kind="artist" id={f.id} />
+                  {f.id && (
+                    <div className="absolute right-2 top-2 z-10">
+                      <UnfavButton
+                        kind="artist"
+                        id={f.id}
+                      />
                     </div>
-                  ) : null}
-                  {/* Only pass src when defined */}
+                  )}
+
                   <Media
-                    {...(f.image ? { src: f.image } : {})}
+                    src={f.image}
                     alt={`${f.title} — artist photo`}
                   />
+
                   <Meta title={f.title} />
                 </>
               );
@@ -303,7 +344,6 @@ export default function FavoritesPage() {
         )}
       </section>
 
-      {/* Albums */}
       <section
         role="tabpanel"
         id={`panel-albums-${uid}`}
@@ -313,28 +353,40 @@ export default function FavoritesPage() {
       >
         <header className="flex items-end justify-between">
           <h2 className="text-lg font-semibold">
-            Albums <span className="text-muted font-normal">({albums.length})</span>
+            Albums{" "}
+            <span className="font-normal text-muted">
+              ({albums.length})
+            </span>
           </h2>
         </header>
 
         {albums.length === 0 ? (
-          <p className="text-sm text-muted">No favorite albums yet.</p>
+          <p className="text-sm text-muted">
+            No favorite albums yet.
+          </p>
         ) : (
           <div className={GRID}>
             {albums.map((f) => {
-              const href = f?.id ? `/album/${encodeURIComponent(f.id)}` : undefined;
+              const href = f.id
+                ? `/album/${encodeURIComponent(f.id)}`
+                : undefined;
+
               const inner = (
                 <>
-                  {f.id ? (
-                    <div className="absolute top-2 right-2 z-10">
-                      <UnfavButton kind="album" id={f.id} />
+                  {f.id && (
+                    <div className="absolute right-2 top-2 z-10">
+                      <UnfavButton
+                        kind="album"
+                        id={f.id}
+                      />
                     </div>
-                  ) : null}
-                  {/* Only pass src when defined */}
+                  )}
+
                   <Media
-                    {...(f.image ? { src: f.image } : {})}
+                    src={f.image}
                     alt={`${f.title} — album cover`}
                   />
+
                   <Meta title={f.title} />
                 </>
               );
